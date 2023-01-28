@@ -57,7 +57,7 @@ Choose recipes - Easy Meals
                     {% endif %}
                     <!--Recipe image-->
                     <a href="{% url 'recipes:recipe' recipe.recipe_id %}">
-                        <img alt="{{ recipe.title }} {{ recipe.subtitle }}"
+                        <img alt="{{ recipe.title }} {{ recipe.subtitle }}" loading="lazy"
                              class="card-img-top" src="/static/recipes/images/recipe-images-800w/{{ recipe.recipe_id_hash }}.jpg">
                     </a>
                     <!--Block under image for title, actions and short description-->
