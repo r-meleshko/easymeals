@@ -81,7 +81,14 @@ def recipe(request, recipe_id: int) -> render:
                     'Glucides', 'dont sucres', 'Protéines', 'Sel']
     unit = ['kJ', 'kcal'] + ['g'] * 5
     nutr_val = zip(nutr_val_cat, recipe_dict['nutritional_val'], unit)
-    return render(request, 'recipes/recipe.html', {'recipe': recipe_dict, 'nutr_val': nutr_val})
+    active_recipes = UserActiveRecipe.objects.filter(user_id=request.user.id).values_list('recipe', flat=True)
+    favorite_recipes = UserFavoriteRecipe.objects.filter(user_id=request.user.id).values_list('recipe', flat=True)
+    return render(request, 'recipes/recipe.html',
+                  {'recipe': recipe_dict,
+                   'nutr_val': nutr_val,
+                   'active_recipes': active_recipes,
+                   'favorite_recipes': favorite_recipes
+                   })
 
 
 @api_view(['POST'])

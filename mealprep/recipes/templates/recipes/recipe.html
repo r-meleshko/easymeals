@@ -53,6 +53,61 @@ Recipe - Easy Meals
 
                                 <!--Tags, preparation time and difficulty-->
                                 <div class="container d-flex flex-column align-items-center my-4">
+
+                                    <!--Active/favorites buttons-->
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-toolbar">
+                                            <!--Active recipes buttons-->
+                                            {% if recipe.recipe_id in active_recipes %}
+                                            <div data-id="div_add_to_active_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-outline-success me-1" data-id="add_to_active"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ active
+                                                </button>
+                                            </div>
+                                            <div data-id="div_remove_from_active_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-outline-danger me-1" data-id="remove_from_active"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- active
+                                                </button>
+                                            </div>
+                                            {% else %}
+                                            <div data-id="div_add_to_active_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-outline-success me-1" data-id="add_to_active"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ active
+                                                </button>
+                                            </div>
+                                            <div data-id="div_remove_from_active_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-outline-danger me-1" data-id="remove_from_active"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- active
+                                                </button>
+                                            </div>
+                                            {% endif %}
+                                            <!--Favorite recipes buttons-->
+                                            {% if recipe.recipe_id in favorite_recipes %}
+                                            <div data-id="div_add_to_favorites_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-outline-success me-1" data-id="add_to_favorites"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ favorites
+                                                </button>
+                                            </div>
+                                            <div data-id="div_remove_from_favorites_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-outline-danger me-1" data-id="remove_from_favorites"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- favorites
+                                                </button>
+                                            </div>
+                                            {% else %}
+                                            <div data-id="div_add_to_favorites_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-outline-success me-1" data-id="add_to_favorites"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ favorites
+                                                </button>
+                                            </div>
+                                            <div data-id="div_remove_from_favorites_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-outline-danger me-1" data-id="remove_from_favorites"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- favorites
+                                                </button>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
                                     <p class="text-center">Tags :
                                         {% for tag in recipe.description.tags %}
                                         <span class="badge rounded-pill bg-success">{{ tag }}</span>
