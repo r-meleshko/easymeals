@@ -17,6 +17,7 @@ docs/
 *.json
 *.csv
 *.xlsx
+*.xls
 recipes/recipes_html
 
 # Web scraping projects
