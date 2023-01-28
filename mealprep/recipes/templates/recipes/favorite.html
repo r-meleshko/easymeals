@@ -2,12 +2,16 @@
 {% load static %}
 
 {% block title %}
-Favorite recipes - EasyMeals
+Favorite recipes - Easy Meals
 {% endblock %}
 
 {% block main %}
 <div class="album py-5 bg-light">
     <div class="container">
+
+        <div  data-id="active-favorite-title">
+            <div class="d-flex justify-content-center align-items-center"><p class="navbar-brand">FAVORITE RECIPES</p></div>
+        </div>
 
         {% if not favorite_recipes %}
         <div class="d-flex flex-column justify-content-center align-items-center">

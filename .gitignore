@@ -1,11 +1,13 @@
 # Project specific files to ignore
 *dump.sql
-staticfiles/
+static/
 pg-data/
+archive/
+admin/
+docs/
 .env
 .prod-env
 *.sqlite_test
-archive/
 .DS_Store
 *.sqlite
 *.svg
@@ -15,7 +17,6 @@ archive/
 *.json
 *.csv
 *.xlsx
-docs/
 recipes/recipes_html
 
 # Web scraping projects
