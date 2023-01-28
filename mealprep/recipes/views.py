@@ -86,10 +86,10 @@ def recipe(request, recipe_id: int) -> render:
     return render(request, 'recipes/recipe.html',
                   {'recipe': recipe_dict,
                    'nutr_val': nutr_val,
-                   'active_recipes': active_recipes,
-                   'favorite_recipes': favorite_recipes
+                   'active_recipe': recipe_id in active_recipes,
+                   'favorite_recipe': recipe_id in favorite_recipes
                    })
-
+ 
 
 @api_view(['POST'])
 @login_required
