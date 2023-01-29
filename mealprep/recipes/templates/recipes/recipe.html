@@ -42,7 +42,7 @@ Recipe - Easy Meals
                                     </button>
                                 </div>
                             </nav>
-                            <hr class="bg-danger border-2 border-top border-dark">
+                            <hr class="bg-danger border-2 border-top border-dark mx-2">
                         </div>
 
                         <!--Card body-->
@@ -51,29 +51,30 @@ Recipe - Easy Meals
                             <div aria-labelledby="nav-home-tab" class="tab-pane active show" id="nav-home"
                                  role="tabpanel">
                                 <div class="d-flex justify-content-center align-items-center">
+
                                     <!--Active/favorites buttons-->
-                                    <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex justify-content-between align-items-center my-3">
                                         <div class="btn-toolbar">
                                             <!--Active recipes buttons-->
                                             {% if active_recipe %}
-                                            <div data-id="div_add_to_active_{{ recipe.recipe_id }}" style="display:none">
-                                                <button class="btn btn-sm btn-outline-success me-1" data-id="add_to_active"
+                                            <div class="me-3" data-id="div_add_to_active_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-success me-1" data-id="add_to_active"
                                                         data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ active
                                                 </button>
                                             </div>
-                                            <div data-id="div_remove_from_active_{{ recipe.recipe_id }}">
-                                                <button class="btn btn-sm btn-outline-danger me-1" data-id="remove_from_active"
+                                            <div class="me-3" data-id="div_remove_from_active_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-danger me-1" data-id="remove_from_active"
                                                         data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- active
                                                 </button>
                                             </div>
                                             {% else %}
-                                            <div data-id="div_add_to_active_{{ recipe.recipe_id }}">
-                                                <button class="btn btn-sm btn-outline-success me-1" data-id="add_to_active"
+                                            <div class="me-3" data-id="div_add_to_active_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-success me-1" data-id="add_to_active"
                                                         data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ active
                                                 </button>
                                             </div>
-                                            <div data-id="div_remove_from_active_{{ recipe.recipe_id }}" style="display:none">
-                                                <button class="btn btn-sm btn-outline-danger me-1" data-id="remove_from_active"
+                                            <div class="me-3" data-id="div_remove_from_active_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-danger me-1" data-id="remove_from_active"
                                                         data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- active
                                                 </button>
                                             </div>
@@ -81,30 +82,33 @@ Recipe - Easy Meals
                                             <!--Favorite recipes buttons-->
                                             {% if favorite_recipe %}
                                             <div data-id="div_add_to_favorites_{{ recipe.recipe_id }}" style="display:none">
-                                                <button class="btn btn-sm btn-outline-success me-1" data-id="add_to_favorites"
+                                                <button class="btn btn-sm btn-success me-1" data-id="add_to_favorites"
                                                         data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ favorites
                                                 </button>
                                             </div>
                                             <div data-id="div_remove_from_favorites_{{ recipe.recipe_id }}">
-                                                <button class="btn btn-sm btn-outline-danger me-1" data-id="remove_from_favorites"
+                                                <button class="btn btn-sm btn-danger me-1" data-id="remove_from_favorites"
                                                         data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- favorites
                                                 </button>
                                             </div>
                                             {% else %}
                                             <div data-id="div_add_to_favorites_{{ recipe.recipe_id }}">
-                                                <button class="btn btn-sm btn-outline-success me-1" data-id="add_to_favorites"
+                                                <button class="btn btn-sm btn-success me-1" data-id="add_to_favorites"
                                                         data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ favorites
                                                 </button>
                                             </div>
                                             <div data-id="div_remove_from_favorites_{{ recipe.recipe_id }}" style="display:none">
-                                                <button class="btn btn-sm btn-outline-danger me-1" data-id="remove_from_favorites"
+                                                <button class="btn btn-sm btn-danger me-1" data-id="remove_from_favorites"
                                                         data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- favorites
                                                 </button>
                                             </div>
                                             {% endif %}
                                         </div>
                                     </div>
+
                                 </div>
+
+
                                 <!--Tags, preparation time and difficulty-->
                                 <div class="container d-flex flex-column align-items-center my-4">
 
@@ -121,7 +125,7 @@ Recipe - Easy Meals
                                     <p class="text-center">Difficulté : <span class="badge rounded-pill bg-success">{{ recipe.description.difficulty }}</span>
                                     </p>
                                 </div>
-                                <hr class="bg-danger border-2 border-top border-dark mx-3">
+                                <hr class="bg-danger border-2 border-top border-dark mx-2">
 
                                 <!--Nutritional value-->
                                 <div class="container mt-4">
@@ -139,7 +143,7 @@ Recipe - Easy Meals
                                         </tbody>
                                     </table>
                                 </div>
-                                <hr class="bg-danger border-2 border-top border-dark mx-3">
+                                <hr class="bg-danger border-2 border-top border-dark mx-2">
 
                                 <!--Tools-->
                                 <div class="container mt-4 mb-4">

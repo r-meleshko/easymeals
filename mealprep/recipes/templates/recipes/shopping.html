@@ -37,7 +37,7 @@ Shopping - Easy Meals
                             {% for ingredient in ingredients %}
                             <div>
                                 <a data-ingredient-id="{{ ingredient.ingredient_id }}" data-id="ingredient" href="#">
-                                    {% if ingredient.status == 1 %}
+                                    {% if ingredient.ingredient_id in bought_ingredients %}
                                     <div class="card shadow-sm h-100 justify-content-center align-items-center border border-2 border-success"
                                         data-ingredient-id="ingredient_{{ ingredient.ingredient_id }}"
                                         style="background: rgba(228, 250, 191, 255)">
@@ -45,11 +45,12 @@ Shopping - Easy Meals
                                     <div class="card shadow-sm h-100 justify-content-center align-items-center" data-ingredient-id="ingredient_{{ ingredient.ingredient_id }}">
                                             {% endif %}
                                             <!--Recipe image-->
-                                            <img alt="{{ ingredient.ingredient.ingredient_name}}" class="ingredient_image"
-                                                 src="/static/recipes/images/ingredient-images/{{ ingredient.ingredient.ingredient_id_hash }}.png">
+                                            <img alt="{{ ingredient.ingredient__ingredient_name }}" class="ingredient_image"
+                                                 src="/static/recipes/images/ingredient-images/{{ ingredient.ingredient__ingredient_id_hash }}.png">
+                                            {% load ingredient_formatting %}
                                             <!--Block under image for title, actions and short description-->
-                                            <p class="card-title mx-2" data-id="recipe-card-title"> {{ ingredient.ingredient.ingredient_name }}</p>
-                                            <p class="card-subtitle" data-id="recipe-card-subtitle">{{ ingredient.quantity_str }} {{ ingredient.quantity_unit }}</p>
+                                            <p class="card-title mx-2" data-id="recipe-card-title"> {{ ingredient.ingredient__ingredient_name }}</p>
+                                            <p class="card-subtitle" data-id="recipe-card-subtitle">{{ ingredient.quantity|format_ingr_quant }} {{ ingredient.quantity_unit|pluralize_ingr:ingredient.quantity }}</p>
                                         </div>
                                 </a>
                             </div>

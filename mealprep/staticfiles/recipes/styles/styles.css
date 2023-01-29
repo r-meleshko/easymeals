@@ -32,12 +32,12 @@ p[data-id='grid-card-subtitle']{
     font-size: 0.8em;
 }
 
+
 @media (min-width: 850px) {
     [data-id="active-favorite-title"] {
         display: none;
     }
 }
-
 
 /* Ingredients */
 .ingredient_image {
@@ -81,7 +81,7 @@ table[data-id="nutr-value-table"]{
 }
 
 p[data-id='instruction']{
-    font-size: 1.15em;
+    font-size: 1.1em;
 }
 
 .discover-link, .discover-link:hover {

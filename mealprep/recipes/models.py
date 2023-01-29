@@ -128,7 +128,7 @@ class RecipeTool(models.Model):
         db_table = 'recipe_tool'
 
 
-# User related table
+# User related tables
 class User(AbstractUser):
     pass
 
@@ -136,9 +136,6 @@ class User(AbstractUser):
 class UserShoppingList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, null=True)
-    quantity_unit = models.CharField(max_length=20, null=True)
-    quantity = models.FloatField()
-    quantity_str = models.CharField(max_length=10, null=True)
     status = models.SmallIntegerField(default=0)
 
 

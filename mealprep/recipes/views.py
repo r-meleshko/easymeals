@@ -1,24 +1,17 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models.functions import Concat
-from django.db.models import Sum, Value
+from django.db.models import Sum
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 
 from .models import Recipe, RecipeIngredient, UserActiveRecipe, UserFavoriteRecipe, UserShoppingList
 
 
-def handler404(request, *args, **argv):
-    response = render('recipes/404.html', {})
-    response.status_code = 404
-    return response
-
-
 @api_view(['GET'])
 @login_required
 def index(request) -> redirect:
     """Redirect from index to active."""
-    return redirect('recipes:choose')
+    return redirect('recipes:active')
 
 
 @api_view(['GET'])
@@ -64,12 +57,19 @@ def favorite(request) -> render:
 @login_required
 def shopping(request) -> render:
     """List of ingredients to buy for active recipe(s). Sorted by ingredient category."""
-    ingredients = UserShoppingList.objects.filter(user_id=request.user.id).select_related('ingredient')
+    recipes_list = UserActiveRecipe.objects.filter(user_id=request.user.id).values_list('recipe_id', flat=True)
+    ingredients = RecipeIngredient.objects.filter(recipe_id__in=recipes_list).select_related('ingredient')
+    ingredients = ingredients.values(
+        'ingredient_id', 'ingredient__ingredient_id_hash', 'ingredient__ingredient_name', 'ingredient__ingredient_class',
+        'quantity_unit'
+    ).order_by().annotate(quantity=Sum("quantity"))
     categories = ["Légumes", "Fruits", "Herbes", "Végétarien", "Conserves", "Graines et Pâtes", "Épices",
                   "Laitier", "Salades", "Pains", "Autre"]
-    ingr_dict = {i: ingredients.filter(ingredient__ingredient_class=i) for i in categories if
-                 ingredients.filter(ingredient__ingredient_class=i)}
-    return render(request, 'recipes/shopping.html', {'ingr_dict': ingr_dict, 'categories': categories})
+    ingr_dict = {i: ingredients.filter(ingredient__ingredient_class=i) for i in categories if ingredients.filter(ingredient__ingredient_class=i)}
+    bought_ingredients = UserShoppingList.objects.filter(user_id=request.user.id, status=1).values_list('ingredient_id', flat=True)
+    return render(request, 'recipes/shopping.html', {
+        'ingr_dict': ingr_dict, 'categories': categories, 'bought_ingredients': bought_ingredients
+    })
 
 
 @api_view(['GET'])
@@ -89,21 +89,27 @@ def recipe(request, recipe_id: int) -> render:
                    'active_recipe': recipe_id in active_recipes,
                    'favorite_recipe': recipe_id in favorite_recipes
                    })
- 
+
 
 @api_view(['POST'])
 @login_required
 def shopping_update(request) -> HttpResponse:
+    ingredient_id = request.POST['ingredient_id']
     """Change status of an ingredient (bought/to buy)."""
-    UserShoppingList.objects.filter(ingredient=request.POST['ingredient_id']).update(
-        status=int(request.POST['action']))
+    if UserShoppingList.objects.filter(user_id=request.user.id, ingredient=ingredient_id).exists():
+        UserShoppingList.objects.filter(user_id=request.user.id, ingredient=ingredient_id).update(
+            status=int(request.POST['action'])
+        )
+    else:
+        UserShoppingList(user_id=request.user.id, status=ingredient_id).save()
     return HttpResponse('Success.')
 
 
 @api_view(['POST'])
 @login_required
 def favorite_active_update(request):
-    """Add/remove a recipe from user active/favorites recipes. Used in choose, active and favorite views."""
+    """Add/remove a recipe from user active/favorites recipes. Set all ingredients status to 'not bought'
+    Used in choose, active and favorite views."""
     models_dict = {'favorites': UserFavoriteRecipe, 'active': UserActiveRecipe}
     model = models_dict[request.POST['model']]
     recipe_id = request.POST['recipe_id']
@@ -114,30 +120,5 @@ def favorite_active_update(request):
     elif request.POST['action'] == 'remove':
         model.objects.filter(user_id=request.user.id).filter(recipe_id=recipe_id).delete()
     if request.POST['model'] == 'active':
-        update_shopping_list(request)
+        UserShoppingList.objects.filter(user_id=request.user.id).update(status=0)
     return HttpResponse('Success')
-
-
-def update_shopping_list(request) -> None:
-    """Update user list of ingredients to buy after modifying list of active recipes."""
-    def format_quantity(q: float) -> str:
-        """Format ingredient quantity from float to string. Replace <1 values with ratios."""
-        fract_dict = {0.25: '¼', 0.3: '⅓', 0.5: '½', 0.6: '⅔', 0.75: '¾'}
-        if q in fract_dict:
-            q = fract_dict[q]
-        else:
-            if q % 1 == 0:
-                q = str(int(q))
-            else:
-                q = str(round(q, 1))
-        return q
-    UserShoppingList.objects.filter(user_id=request.user.id).delete()
-    recipes_list = UserActiveRecipe.objects.filter(user_id=request.user.id).values_list('recipe_id', flat=True)
-    ingredients = RecipeIngredient.objects.filter(recipe_id__in=recipes_list)
-    ingredients = ingredients.values('ingredient_id', 'quantity_unit').order_by().annotate(quantity=Sum("quantity"))
-    for ingredient in ingredients:
-        UserShoppingList(user_id=request.user.id, quantity_str=format_quantity(ingredient['quantity']), **ingredient).save()
-    shopping_list = UserShoppingList.objects.filter(
-        user_id=request.user.id, quantity_unit__in=['unité'], quantity__gte=2
-    )
-    shopping_list.update(quantity_unit=Concat('quantity_unit', Value('s')))
