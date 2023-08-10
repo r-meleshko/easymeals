@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fr">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍜</text></svg>">
+        <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" type="text/css">
+        <link rel="stylesheet" href="{% static 'recipes/styles/styles.css' %}">
+        <!--Stylesheet for filters on Choose page-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+        <!--Highlighting active page-->
+        <style>
+            #\{{ request.path }} {
+                    color: green;
+                    font-weight: bold;
+            }
+
+            @media (min-width: 762px) {
+                #\{{ request.path }} {
+                    color: green;
+                    font-weight: bold;
+                    border-bottom: 0.1rem solid green;
+                }
+            }
+        </style>
+        <title>{% block title %}{% endblock %}</title>
+    </head>
+
+    <body>
+        <!--Navigation bar-->
+        <nav class="bg-light border navbar sticky-top navbar-expand-md navbar-light">
+            <div class="container-fluid">
+                <!--Logo-->
+                <a class="navbar-brand" href="/">EASY MEALS</a>
+                <!--Navbar toggler for small screens-->
+                <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!--Page choice buttons-->
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item" ><a class="nav-link" id="/choose" href="{% url 'recipes:choose' %}">Choose</a></li>
+                        <li class="nav-item"><a class="nav-link" id="/active" href="{% url 'recipes:active' %}">Active</a></li>
+                        <li class="nav-item"><a class="nav-link" id="/favorite" href="{% url 'recipes:favorite' %}">Favorites</a></li>
+                        <li class="nav-item"><a class="nav-link" id="/shopping" href="{% url 'recipes:shopping' %}">Shopping</a></li>
+                    </ul>
+                    <!--Logout button-->
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}">Log Out - {{ request.user.username }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main>{% block main %}{% endblock %}</main>
+
+        <footer class="mb-5 small text-center text-muted"></footer>
+
+        <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js" integrity="sha512-aUhL2xOCrpLEuGD5f6tgHbLYEXRpYZ8G5yD+WlFrXrPy2IrWBlu6bih5C9H6qGsgqnU6mgx6KtU8TreHpASprw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"></script>
+
+        {% block script %}{% endblock %}
+
+    </body>
+
+</html>

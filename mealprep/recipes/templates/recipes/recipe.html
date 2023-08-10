@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Recipe - Easy Meals
+{% endblock %}
+
+{% block main %}
+<div class="album py-5 bg-light" xmlns="http://www.w3.org/1999/html">
+    <div class="container">
+        <div class="row row-cols-1 justify-content-center g-3">
+            <div class="col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+                <div class="card shadow-sm h-100 border border-2 border-success">
+
+                    <!--Recipe image-->
+                    <img alt="{{ recipe.title }} {{ recipe.subtitle }}" class="card-img-top"
+                         src="/static/recipes/images/recipe-images-2600w/{{ recipe.hash_id }}.jpg">
+
+                    <div class="card-body d-flex flex-column justify-content-between align-items-center">
+                        <!--Recipe title-->
+                        <div>
+                            <p class="card-title" data-id="recipe-page-title">{{ recipe.title }} {{ recipe.subtitle }}</p>
+                        </div>
+
+                        <!--Navigation bar-->
+                        <div>
+                            <nav>
+                                <div class="nav nav-pills nav-justified mb-3" id="nav-tab" role="tablist">
+                                    <button aria-controls="nav-home" aria-selected="true" class="nav-link active"
+                                            data-bs-target="#nav-home" data-bs-toggle="tab" data-id="recipe-page-nav" id="nav-home-tab"
+                                            role="tab" type="button">Description
+                                    </button>
+                                    <button aria-controls="nav-profile" aria-selected="false" class="nav-link"
+                                            data-bs-target="#nav-profile" data-bs-toggle="tab" data-id="recipe-page-nav"
+                                            id="nav-profile-tab" role="tab" type="button">
+                                        Ingredients
+                                    </button>
+                                    <button aria-controls="nav-contact" aria-selected="false" class="nav-link"
+                                            data-bs-target="#nav-contact" data-bs-toggle="tab" data-id="recipe-page-nav"
+                                            id="nav-contact-tab" role="tab" type="button">
+                                        Instructions
+                                    </button>
+                                </div>
+                            </nav>
+                            <hr class="bg-danger border-2 border-top border-dark mx-2">
+                        </div>
+
+                        <!--Card body-->
+                        <div class="tab-content col-md-9 col-lg-8 col-xl-8 col-xxl-8" id="nav-tabContent">
+                            <!--Description tab-->
+                            <div aria-labelledby="nav-home-tab" class="tab-pane active show" id="nav-home"
+                                 role="tabpanel">
+                                <div class="d-flex justify-content-center align-items-center">
+
+                                    <!--Active/favorites buttons-->
+                                    <div class="d-flex justify-content-between align-items-center my-3">
+                                        <div class="btn-toolbar">
+                                            <!--Active recipes buttons-->
+                                            {% if active_recipe %}
+                                            <div class="me-3" data-id="div_add_to_active_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-success me-1" data-id="add_to_active"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ active
+                                                </button>
+                                            </div>
+                                            <div class="me-3" data-id="div_remove_from_active_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-danger me-1" data-id="remove_from_active"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- active
+                                                </button>
+                                            </div>
+                                            {% else %}
+                                            <div class="me-3" data-id="div_add_to_active_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-success me-1" data-id="add_to_active"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ active
+                                                </button>
+                                            </div>
+                                            <div class="me-3" data-id="div_remove_from_active_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-danger me-1" data-id="remove_from_active"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- active
+                                                </button>
+                                            </div>
+                                            {% endif %}
+                                            <!--Favorite recipes buttons-->
+                                            {% if favorite_recipe %}
+                                            <div data-id="div_add_to_favorites_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-success me-1" data-id="add_to_favorites"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ favorites
+                                                </button>
+                                            </div>
+                                            <div data-id="div_remove_from_favorites_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-danger me-1" data-id="remove_from_favorites"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- favorites
+                                                </button>
+                                            </div>
+                                            {% else %}
+                                            <div data-id="div_add_to_favorites_{{ recipe.recipe_id }}">
+                                                <button class="btn btn-sm btn-success me-1" data-id="add_to_favorites"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">+ favorites
+                                                </button>
+                                            </div>
+                                            <div data-id="div_remove_from_favorites_{{ recipe.recipe_id }}" style="display:none">
+                                                <button class="btn btn-sm btn-danger me-1" data-id="remove_from_favorites"
+                                                        data-page-type="choose" data-recipe-id="{{ recipe.recipe_id }}">- favorites
+                                                </button>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <!--Tags, preparation time and difficulty-->
+                                <div class="container d-flex flex-column align-items-center my-4">
+
+                                    <p class="text-center">Tags :
+                                        {% for tag in recipe.description.tags %}
+                                        <span class="badge rounded-pill bg-success">{{ tag }}</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p class="text-center">Temps de préparation : <span
+                                            class="badge rounded-pill bg-success">{{ recipe.description.time.prep }} min</span>
+                                    </p>
+                                    <p class="text-center">Temps total : <span class="badge rounded-pill bg-success">{{ recipe.description.time.total }} min</span>
+                                    </p>
+                                    <p class="text-center">Difficulté : <span class="badge rounded-pill bg-success">{{ recipe.description.difficulty }}</span>
+                                    </p>
+                                </div>
+                                <hr class="bg-danger border-2 border-top border-dark mx-2">
+
+                                <!--Nutritional value-->
+                                <div class="container mt-4">
+                                    <h4 class="text-center mb-3">Valeur nutritionnelle</h4>
+                                    <table class="table table-borderless" data-id="nutr-value-table">
+                                        <tbody>
+                                        {% for category, value, unit in nutr_val %}
+                                        <tr>
+                                            <td>{{ category }}</td>
+                                            <td>
+                                                <div class="text-end">{{ value|floatformat }} {{ unit }}</div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <hr class="bg-danger border-2 border-top border-dark mx-2">
+
+                                <!--Tools-->
+                                <div class="container mt-4 mb-4">
+                                    <h4 class="text-center">Ustensiles</h4>
+                                    <p class="text-center">
+                                        {% for tool in recipe.tool %}
+                                        <span class="badge rounded-pill bg-success m-1">{{ tool }}</span>
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!--Ingredients tab-->
+                            <div aria-labelledby="nav-profile-tab" class="tab-pane fade my-3" id="nav-profile"
+                                 role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3 g-3">
+                                        {% for ingredient in recipe.ingredients %}
+                                        <div>
+                                            <a data-id="ingredient" data-ingredient-id="{{ ingredient.0 }}" href="#">
+                                                <div class="card shadow-sm h-100 justify-content-center align-items-center"
+                                                     data-ingredient-id="ingredient_{{ ingredient.0 }}">
+                                                    <!--Recipe image-->
+                                                    <img alt="{{ ingredient.1}}"
+                                                         class="ingredient_image" src="/static/recipes/images/ingredient-images/{{ ingredient.5 }}.png">
+                                                    <!--Block under image for title, actions and short description-->
+                                                    <p class="card-title mx-2" data-id="shopping-ingredient-title"
+                                                       style="font-weight: 400;"> {{ ingredient.1}}</p>
+                                                    <p class="card-subtitle" data-id="shopping-ingredient-subtitle">{{ ingredient.2 }} {{ ingredient.3 }}</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Instructions tab-->
+                            <div aria-labelledby="nav-contact-tab" class="tab-pane fade" id="nav-contact"
+                                 role="tabpanel">
+                                <div class="container">
+                                    {% for instruction in recipe.instructions %}
+                                    <div class="text-center mt-4 mb-2">
+                                        <img alt="x"
+                                             data-id="image-instruction-number" src="/static/recipes/images/instruction-numbers/{{ forloop.counter }}-circle-fill.svg">
+                                    </div>
+                                    <p data-id="instruction">{{ instruction }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<!--Change color and status of ingredient-->
+<script src="/static/recipes/scripts/recipe-ingredient-state.js"></script>
+<script src="/static/recipes/scripts/add-remove-buttons.js"></script>
+{% endblock %}

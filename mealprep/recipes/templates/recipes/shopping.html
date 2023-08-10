@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Shopping - Easy Meals
+{% endblock %}
+
+{% block main %}
+<div class="album py-5 bg-light">
+    <div class="container">
+
+        {% if not ingr_dict %}
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <img alt="..." class="img-fluid" src="/static/recipes/images/gif/confused_travolta.gif">
+            <h5 class="mt-4">Nothing to see here, <a class="discover-link" href="{% url 'recipes:choose' %}">discover new recipes</a>.</h5>
+        </div>
+        {% endif %}
+
+        <div class="accordion" id="accordionPanelsStayOpenExample">
+            <!--Each category-->
+            {% for category, ingredients in ingr_dict.items %}
+            <div class="accordion-item">
+                <!--Button with category name-->
+                <h2 class="accordion-header" id="panelsStayOpen-heading{{ forloop.counter }}">
+                    <button aria-controls="panelsStayOpen-collapse{{ forloop.counter }}" aria-expanded="true" class="accordion-button"
+                            data-bs-target="#panelsStayOpen-collapse{{ forloop.counter }}" data-bs-toggle="collapse"
+                            type="button">
+                        {{ category }}
+                    </button>
+                </h2>
+                <div aria-labelledby="panelsStayOpen-heading{{ forloop.counter }}" class="accordion-collapse collapse show"
+                     id="panelsStayOpen-collapse{{ forloop.counter }}">
+                    <div class="accordion-body">
+
+                        <!--Each individual ingredient-->
+                        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+                            {% for ingredient in ingredients %}
+                            <div>
+                                <a data-ingredient-id="{{ ingredient.ingredient_id }}" data-id="ingredient" href="#">
+                                    {% if ingredient.ingredient_id in bought_ingredients %}
+                                    <div class="card shadow-sm h-100 justify-content-center align-items-center border border-2 border-success"
+                                        data-ingredient-id="ingredient_{{ ingredient.ingredient_id }}"
+                                        style="background: rgba(228, 250, 191, 255)">
+                                    {% else %}
+                                    <div class="card shadow-sm h-100 justify-content-center align-items-center" data-ingredient-id="ingredient_{{ ingredient.ingredient_id }}">
+                                            {% endif %}
+                                            <!--Recipe image-->
+                                            <img alt="{{ ingredient.ingredient__ingredient_name }}" class="ingredient_image"
+                                                 src="/static/recipes/images/ingredient-images/{{ ingredient.ingredient__ingredient_id_hash }}.png">
+                                            {% load ingredient_formatting %}
+                                            <!--Block under image for title, actions and short description-->
+                                            <p class="card-title mx-2" data-id="recipe-card-title"> {{ ingredient.ingredient__ingredient_name }}</p>
+                                            <p class="card-subtitle" data-id="recipe-card-subtitle">{{ ingredient.quantity|format_ingr_quant }} {{ ingredient.quantity_unit|pluralize_ingr:ingredient.quantity }}</p>
+                                        </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<!--Change color and status of ingredient-->
+<script src="/static/recipes/scripts/shopping-ingredient-state.js"></script>
+{% endblock %}
+
